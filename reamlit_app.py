@@ -39,9 +39,11 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
-# Переформатирование DataFrame в сводную таблицу
+# Переформатирование DataFrame в сводную таблицу с учетом алфавитного порядка авторов
 df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
 
+# Переименование индекса и добавление нумерации, независимой от авторов
+df_reshaped.index = range(1, len(df_reshaped) + 1)
 
 # Настройка стиля таблицы
 st.markdown(
