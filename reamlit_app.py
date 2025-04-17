@@ -18,10 +18,6 @@ def load_data():
     return df
 
 df = load_data()
-
-# Get unique authors in the order they appear in the DataFrame
-ordered_authors = df['author'].unique()
-
 # Show a multiselect widget with the authors
 authors = st.multiselect(
     "Выберите авторов",
