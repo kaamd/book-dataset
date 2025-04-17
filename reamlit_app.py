@@ -11,7 +11,7 @@ st.write(
     """
 )
 
-# Load the data from a CSV.
+# Load the data from a CSV
 @st.cache_data
 def load_data():
     df = pd.read_csv("japanese_books (1).csv")
@@ -19,9 +19,13 @@ def load_data():
 
 df = load_data()
 
-# Show a multiselect widget with the authors using `st.multiselect`, используем ordered_authors
+# Get unique authors in the order they appear in the DataFrame
+ordered_authors = df['author'].unique()
+
+# Show a multiselect widget with the authors
 authors = st.multiselect(
     "Выберите авторов",
+    ordered_authors,
     default=[
         "Харуки Мураками", 
         "Содзи Симада", 
