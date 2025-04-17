@@ -15,7 +15,7 @@ def load_data():
     return df
     
 df = load_data()
-## Выбор авторов с использованием уникальных значений из DataFrame
+# Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
     options=sorted(df["author"].unique()),  # Получаем уникальные имена авторов напрямую
@@ -36,10 +36,8 @@ authors = st.multiselect(
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 # Переформатирование DataFrame в сводную таблицу с учетом алфавитного порядка авторов
 df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
-# Переупорядочиваем столбцы в сводной таблице согласно количеству книг
-df_reshaped = df_reshaped.reindex(columns=sorted_authors)
 # Переименование индекса и добавление нумерации, независимой от авторов
-df_reshaped.index = range(1, len(df_reshaped) + 1)
+df_reshaped.index = range(1, len(df_reshaped) + 1) 
 
 # Настройка стиля таблицы
 st.markdown(
@@ -49,7 +47,6 @@ st.markdown(
         border-collapse: collapse;
         width: 100%;
     }
-    
     .streamlit-table th, .streamlit-table td {
         max-width: 200px; /* Максимальная ширина ячеек */
         text-align: left; /* Выравнивание текста */
@@ -60,7 +57,6 @@ st.markdown(
         white-space: normal; /* Позволяет переносить текст */
         border: 1px solid #ddd; /* Граница ячеек */
     }
-    
     .streamlit-table th {
         background-color: #f0f0f0; /* Цвет фона заголовков */
     }
@@ -68,17 +64,16 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 # Отображение таблицы
 st.dataframe(
     df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
-# Prepare data for the bar chart.
+# Подготовка данных для столбчатой диаграммы.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-# Предполагаем, что count является целым числом
+# Настройка диаграммы
 chart = alt.Chart(df_chart).mark_bar().encode(
     x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
     y=alt.Y('author:N', title='Авторы', sort='-x'),
@@ -86,12 +81,9 @@ chart = alt.Chart(df_chart).mark_bar().encode(
     tooltip=['title:N', 'count:Q']  # Информация при наведении
 ).properties(height=400)
 
-# Убедимся, что на оси X отображаются только уникальные значения
+# Проверка, что на оси X отображаются только уникальные значения
 chart = chart.encode(
-    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
+    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5])) 
 )
-# Сортировка столбцов в алфавитном порядке
-df_reshaped = df_reshaped.reindex(sorted(df_reshaped.columns), axis=1)
-
 # Display the data as a bar chart using `st.altair_chart`.
 st.altair_chart(chart, use_container_width=True) 
