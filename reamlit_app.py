@@ -11,14 +11,15 @@ st.write(
     """
 )
 
-# Load the data from a CSV
+# Load the data from a CSV.
 @st.cache_data
 def load_data():
     df = pd.read_csv("japanese_books (1).csv")
     return df
 
 df = load_data()
-# Show a multiselect widget with the authors
+
+# Предполагается, что variable ordered_authors уже определен
 authors = st.multiselect(
     "Выберите авторов",
     ordered_authors,
@@ -38,10 +39,7 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам
 df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
 
-# Сортировка выбранных авторов по алфавиту
-df_filtered.sort_values(by='author', inplace=True)
-
-# Добавление столбца с порядковыми номерами
+# Добавление столбца с порядковыми номерами, который будет независим от авторов
 df_filtered['№'] = range(1, len(df_filtered) + 1)
 
 # Переформатирование DataFrame в сводную таблицу
