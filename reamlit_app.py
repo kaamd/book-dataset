@@ -19,11 +19,24 @@ def load_data():
 
 df = load_data()
 
-# Show a multiselect widget with the authors using `st.multiselect`.
+# Получаем уникальные авторы в том порядке, в котором они находятся в DataFrame
+ordered_authors = df['author'].unique()
+
+# Show a multiselect widget with the authors using `st.multiselect`, используем ordered_authors
 authors = st.multiselect(
     "Выберите авторов",
-    df.author.unique(),
-    ["Харуки Мураками", "Содзи Симада", "Котаро Исака", "Нацухико Кёгоку", "Канаэ Минато", "Аша Лемми", "Кэйго Хигасино", "Харольд Сакуиси", "Тору Фудзисава"],
+    ordered_authors,
+    default=[
+        "Харуки Мураками", 
+        "Содзи Симада", 
+        "Котаро Исака", 
+        "Нацухико Кёгоку", 
+        "Канаэ Минато", 
+        "Аша Лемми", 
+        "Кэйго Хигасино", 
+        "Харольд Сакуиси", 
+        "Тору Фудзисава",
+    ],
 )
 
 # Filter the dataframe based on the selected authors.
