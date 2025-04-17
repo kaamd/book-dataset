@@ -18,7 +18,8 @@ def load_data():
     return df
 
 df = load_data()
-
+# Получаем уникальный список авторов в порядке их появления
+ordered_authors = df["author"].unique()
 # Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
