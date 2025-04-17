@@ -19,7 +19,7 @@ def load_data():
 
 df = load_data()
 
-# Выбор авторов с использованием уникальных значений из DataFrame
+## Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
     options=sorted(df["author"].unique()),  # Получаем уникальные имена авторов напрямую
@@ -39,8 +39,17 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
+# Подсчет количества книг у каждого автора
+author_counts = df_filtered['author'].value_counts()
+
+# Сортировка авторов по количеству книг от большего к меньшему
+sorted_authors = author_counts.index.tolist()
+
 # Переформатирование DataFrame в сводную таблицу с учетом алфавитного порядка авторов
 df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
+
+# Переупорядочиваем столбцы в сводной таблице согласно количеству книг
+df_reshaped = df_reshaped.reindex(columns=sorted_authors)
 
 # Переименование индекса и добавление нумерации, независимой от авторов
 df_reshaped.index = range(1, len(df_reshaped) + 1)
