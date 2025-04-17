@@ -49,17 +49,20 @@ df_filtered['index'] = df_filtered.index + 1
 # С группировка по 'author' и агрегация названий книг
 df_grouped = df_filtered.groupby(['index', 'author'])['title'].apply(lambda x: ', '.join(x)).reset_index()
 
-# Сортируем только выбранные авторы по порядку появления в оригинальном DataFrame
-df_grouped['author'] = pd.Categorical(df_grouped['author'], categories=ordered_authors, ordered=True)
-df_grouped.sort_values('author', inplace=True)
-
 # Переформатируем DataFrame в сводную таблицу
 df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').fillna('')
 
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 # Сортировка DataFrame по автору в алфавитном порядке
-df = df.sort_values(by='author')
+df = df.sort_values(by='author') 
+
+# Добавление столбца с порядковыми номерами
+df.reset_index(drop=True, inplace=True)
+df['№'] = range(1, len(df) + 1)
+
+# Перемещение столбца с порядковыми номерами в начало DataFrame
+df = df[['№', 'author', 'title']]
 # Настройка стиля таблицы
 st.markdown(
     """
