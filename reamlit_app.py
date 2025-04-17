@@ -49,7 +49,9 @@ df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='cou
 
 # Create the bar chart
 chart = alt.Chart(df_chart).mark_bar().encode(
-    x=alt.X('sum(count):Q', title='Количество книг', bin=alt.Bin(step=1)),  # Устанавливаем шаг оси X равным 1
+    x=alt.X('sum(count):Q', title='Количество книг', 
+             bin=alt.Bin(step=1, maxbins=100),  # Устанавливаем шаг оси X равным 1
+             scale=alt.Scale(domain=[0, None])),  # Устанавливаем минимальное значение на оси X равным 0
     y=alt.Y('author:N', title='Авторы', sort='-x'),
     color='title:N',  # Цвет по названию книги
     tooltip=['title:N', 'count:Q']  # Информация при наведении
