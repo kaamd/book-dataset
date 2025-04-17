@@ -46,7 +46,7 @@ df_filtered['№'] = range(1, len(df_filtered) + 1)
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
 
 # Переименование индекса
-df_reshaped.link.name = 'Подробнее'
+df_reshaped.index.name = '№'
 df_reshaped.title.name = 'Название'
 df_reshaped.author.name = 'Автор'
 
