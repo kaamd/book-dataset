@@ -36,7 +36,7 @@ df_filtered['index'] = df_filtered.index + 1  # Создаем новый сто
 df_grouped = df_filtered.groupby(['index', 'author'])['title'].apply(lambda x: ', '.join(x)).reset_index()
 
 # Reshape the dataframe to a pivot table with authors as columns
-df_reshaped = df_grouped.pivot(index='№', columns='author', values='title').fillna('')
+df_reshaped = df_grouped.pivot(index=' ', columns='author', values='title').fillna('')
 
 # Display the data as a table using `st.dataframe`.
 st.dataframe(
