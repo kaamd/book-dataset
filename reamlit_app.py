@@ -60,7 +60,7 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 df_reshaped.index.name = '№'
 
 # Display the data as a table using `st.dataframe`.
-st.dataframe(
+st.table(df_reshaped)(
     df_reshaped.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
