@@ -2,7 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-# Show the page title and description.
+# Show the page title and description
 st.set_page_config(page_title="Book dataset", page_icon="📚")
 st.title("📚 Book dataset")
 st.write(
@@ -11,7 +11,7 @@ st.write(
     """
 )
 
-# Load the data from a CSV.
+# Load the data from a CSV
 @st.cache_data
 def load_data():
     df = pd.read_csv("japanese_books (1).csv")
@@ -19,17 +19,28 @@ def load_data():
 
 df = load_data()
 
-# Отображение всех авторов и названий книг без выбора
-df_filtered = df[["author", "title", "link"]].reset_index(drop=True)
+# Выбор авторов с использованием уникальных значений из DataFrame
+authors = st.multiselect(
+    "Выберите авторов",
+    options=sorted(df["author"].unique()),  # Получаем уникальные имена авторов напрямую
+    default=[
+        "Харуки Мураками", 
+        "Содзи Симада", 
+        "Котаро Исака", 
+        "Нацухико Кёгоку", 
+        "Канаэ Минато", 
+        "Аша Лемми", 
+        "Кэйго Хигасино", 
+        "Харольд Сакуиси", 
+        "Тору Фудзисава",
+    ],
+)
 
-# Создание новой колонки для отображения ссылок с гиперссылками
-df_filtered['link'] = df_filtered['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
+# Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
+df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
-# Переформатирование DataFrame в сводную таблицу
-df_reshaped = df_filtered.pivot(columns='author', values='link').fillna('')
-
-# Переименование индекса и добавление нумерации
-df_reshaped.index = range(1, len(df_reshaped) + 1)
+# Переформатирование DataFrame в сводную таблицу без столбца с номерами
+df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('').reset_index(drop=False)
 
 # Настройка стиля таблицы
 st.markdown(
@@ -59,13 +70,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Отображение таблицы
+# Отображение таблицы без номера авторов
 st.dataframe(
     df_reshaped.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
-# Подготовка данных для диаграммы.
+# Prepare data for the bar chart
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
 # Предполагаем, что count является целым числом
@@ -81,5 +92,5 @@ chart = chart.encode(
     x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
 
-# Отображение данных в виде столбиковой диаграммы с помощью `st.altair_chart`.
+# Display the data as a bar chart using `st.altair_chart`
 st.altair_chart(chart, use_container_width=True)
