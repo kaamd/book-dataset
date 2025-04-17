@@ -70,13 +70,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Отображение таблицы
+# Отображение таблицы без номера авторов
 st.dataframe(
-    df.style.set_table_attributes('class="streamlit-table"'),
+    df_reshaped.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
-# Prepare data for the bar chart.
+# Prepare data for the bar chart
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
 # Предполагаем, что count является целым числом
@@ -92,5 +92,5 @@ chart = chart.encode(
     x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
 
-# Display the data as a bar chart using `st.altair_chart`.
+# Display the data as a bar chart using `st.altair_chart`
 st.altair_chart(chart, use_container_width=True)
