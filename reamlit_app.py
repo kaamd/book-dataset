@@ -14,7 +14,7 @@ st.write(
 # Load the data from a CSV.
 @st.cache_data
 def load_data():
-    df = pd.read_csv("japanese_books (1).csv")
+    df = pd.read_csv("japanese_books.csv")
     return df
 
 df = load_data()
