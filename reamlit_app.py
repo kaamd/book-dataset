@@ -65,11 +65,6 @@ st.dataframe(
     use_container_width=True,
 )
 
-# Display the data as a table using `st.dataframe`.
-st.dataframe(
-    df_reshaped,
-    use_container_width=True,
-)
 # Prepare data for the bar chart.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
