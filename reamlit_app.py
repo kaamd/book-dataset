@@ -22,7 +22,7 @@ df = load_data()
 # Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
-   
+    options=sorted(df["author"].unique()),  # Получаем уникальные имена авторов напрямую
     default=[
         "Харуки Мураками", 
         "Содзи Симада", 
@@ -36,8 +36,8 @@ authors = st.multiselect(
     ],
 )
 
-# Фильтрация DataFrame по выбранным авторам
-df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
+# Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
+df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
 # Добавление столбца с порядковыми номерами, который будет независим от авторов
 df_filtered['№'] = range(1, len(df_filtered) + 1)
@@ -47,7 +47,6 @@ df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').f
 
 # Переименование индекса
 df_reshaped.index.name = '№'
-
 
 # Настройка стиля таблицы
 st.markdown(
