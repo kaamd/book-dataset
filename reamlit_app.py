@@ -36,7 +36,7 @@ df_grouped = df_filtered.groupby(['author', 'title']).size().reset_index(name='c
 df_reshaped = df_filtered.pivot_table(
 df_filtered['index'] = df_filtered.index + 1  # Создаем новый столбец с порядковым номером
 df_grouped = df_filtered.groupby(['index', 'author'])['title'].apply(list).reset_index()  # Группируем по индексу и жанру
-
+)
 df_reshaped = df_grouped.pivot_table(
     index='index', columns='author', values='title', aggfunc=lambda x: x, fill_value=0
 )
