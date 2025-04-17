@@ -59,26 +59,6 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 
-# Применение стиля для переноса текста в таблице
-st.markdown(
-    """
-    <style>
-    .streamlit-table {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-all;
-        table-layout: fixed;
-        width: 100%;
-    }
-    .streamlit-table th, .streamlit-table td {
-        max-width: 150px; /* максимальная ширина ячеек */
-        text-align: left; /* Выравнивание текста */
-        padding: 5px; /* Отступы внутри ячеек */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 # Display the data as a table using `st.dataframe`.
 st.dataframe(
     df_reshaped.style.set_table_attributes('class="streamlit-table"'),
