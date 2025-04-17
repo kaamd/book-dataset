@@ -59,8 +59,36 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 
-# Display the data as a table using `st.dataframe`.
-st.table(df_reshaped)(
+# Apply CSS style for word wrapping and cell size regulation
+st.markdown(
+    """
+    <style>
+    .streamlit-table {
+        border-collapse: collapse;
+        width: 100%;  /* Устанавливаем ширину таблицы на 100% */
+    }
+    
+    .streamlit-table th, .streamlit-table td {
+        max-width: 200px;             /* Максимальная ширина ячеек (при необходимости измените значение) */
+        text-align: left;             /* Выравнивание текста */
+        padding: 5px;                 /* Отступы внутри ячеек */
+        overflow-wrap: break-word;    /* Перенос слов */
+        word-wrap: break-word;        /* Поддержка переноса для старых браузеров */
+        word-break: break-all;        /* Принудительный перенос текста на новые строки */
+        white-space: normal;          /* Позволяет переносить текст */
+        border: 1px solid #ddd;       /* Добавляем границу для ячеек */
+    }
+    
+    .streamlit-table th {
+        background-color: #f0f0f0;   /* Цвет фона заголовков */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Display the table using Streamlit with the specified CSS class
+st.dataframe(
     df_reshaped.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
