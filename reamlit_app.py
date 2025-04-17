@@ -35,25 +35,16 @@ authors = st.multiselect(
         "Тору Фудзисава",
     ],
 )
-
-# Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
-df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
-
-# Подсчет количества книг у каждого автора
-author_counts = df_filtered['author'].value_counts()
-
-# Получаем упорядоченный список авторов по количеству книг (от большего к меньшему)
-sorted_authors = author_counts.index.tolist()
+# Фильтрация DataFrame по выбранным авторам
+if authors:
+        df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
+        df_filtered['№'] = range(1, len(df_filtered) + 1)
 
 # Добавление столбца с порядковыми номерами, который будет независим от авторов
 df_filtered['№'] = range(1, len(df_filtered) + 1)
 
 # Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
-
-# Переупорядочиваем столбцы в сводной таблице согласно количеству книг
-df_reshaped = df_reshaped.reindex(columns=sorted_authors)
-
 
 # Настройка стиля таблицы
 st.markdown(
