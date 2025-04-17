@@ -40,7 +40,7 @@ authors = st.multiselect(
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
 # Переформатирование DataFrame в сводную таблицу
-df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
+df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
 
 
 # Настройка стиля таблицы
