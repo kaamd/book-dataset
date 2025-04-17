@@ -7,7 +7,7 @@ st.set_page_config(page_title="Book dataset", page_icon="📚")
 st.title("📚 Book dataset")
 st.write(
     """
-    Это приложение показывает рейтинг японских авторов, книги которых издавались чаще других за последнии 10 лет в России.
+    Это приложение показывает рейтинг японских авторов, книги которых издавались чаще других за последние 10 лет в России.
     """
 )
 
@@ -39,14 +39,11 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
-# Добавление столбца с порядковыми номерами, который будет независим от авторов
-df_filtered['№'] = range(1, len(df_filtered) + 1)
+# Переформатирование DataFrame в сводную таблицу с учетом алфавитного порядка авторов
+df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
 
-# Переформатирование DataFrame в сводную таблицу
-df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
-
-# Переименование индекса
-df_reshaped.index.name = '№'
+# Переименование индекса и добавление нумерации, независимой от авторов
+df_reshaped.index = range(1, len(df_reshaped) + 1)
 
 # Настройка стиля таблицы
 st.markdown(
@@ -78,11 +75,11 @@ st.markdown(
 
 # Отображение таблицы
 st.dataframe(
-    df.style.set_table_attributes('class="streamlit-table"'),
+    df_reshaped.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
-# Prepare data for the bar chart.
+# Подготовка данных для диаграммы.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
 # Предполагаем, что count является целым числом
@@ -98,5 +95,5 @@ chart = chart.encode(
     x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
 
-# Display the data as a bar chart using `st.altair_chart`.
+# Отображение данных в виде столбиковой диаграммы с помощью `st.altair_chart`.
 st.altair_chart(chart, use_container_width=True)
