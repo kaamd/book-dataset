@@ -59,37 +59,58 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 
-# Apply CSS style for word wrapping and cell size regulation
+# Пример данных
+data = {
+    "author": [
+        "Харуки Мураками", 
+        "Содзи Симада", 
+        "Котаро Исака", 
+        "Нацухико Кёгоку", 
+        "Канаэ Минато"
+    ],
+    "title": [
+        "Убийца атомов, Корабль мечты, Лавка странных вещей, Искушение", 
+        "Благородная пустота, Солнечные часы", 
+        "Искусство обмана", 
+        "Тайны старого замка", 
+        "Свет во мгле, Путь к звездам"
+    ]
+}
+
+# Создание DataFrame
+df = pd.DataFrame(data)
+
+# Настройка стиля таблицы
 st.markdown(
     """
     <style>
     .streamlit-table {
         border-collapse: collapse;
-        width: 100%;  /* Устанавливаем ширину таблицы на 100% */
+        width: 100%;
     }
     
     .streamlit-table th, .streamlit-table td {
-        max-width: 200px;             /* Максимальная ширина ячеек (при необходимости измените значение) */
-        text-align: left;             /* Выравнивание текста */
-        padding: 5px;                 /* Отступы внутри ячеек */
-        overflow-wrap: break-word;    /* Перенос слов */
-        word-wrap: break-word;        /* Поддержка переноса для старых браузеров */
-        word-break: break-all;        /* Принудительный перенос текста на новые строки */
-        white-space: normal;          /* Позволяет переносить текст */
-        border: 1px solid #ddd;       /* Добавляем границу для ячеек */
+        max-width: 200px; /* Максимальная ширина ячеек */
+        text-align: left; /* Выравнивание текста */
+        padding: 5px; /* Отступы внутри ячеек */
+        overflow-wrap: break-word; /* Перенос слов */
+        word-wrap: break-word; /* Поддержка переноса для старых браузеров */
+        word-break: break-word; /* Перенос текста на новую строку */
+        white-space: normal; /* Позволяет переносить текст */
+        border: 1px solid #ddd; /* Граница ячеек */
     }
     
     .streamlit-table th {
-        background-color: #f0f0f0;   /* Цвет фона заголовков */
+        background-color: #f0f0f0; /* Цвет фона заголовков */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Display the table using Streamlit with the specified CSS class
+# Отображение таблицы
 st.dataframe(
-    df_reshaped.style.set_table_attributes('class="streamlit-table"'),
+    df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
