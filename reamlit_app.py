@@ -20,10 +20,13 @@ def load_data():
 df = load_data()
 
 # Отображение всех авторов и названий книг без выбора
-df_filtered = df[["author", "title"]].reset_index(drop=True)
+df_filtered = df[["author", "title", "link"]].reset_index(drop=True)
+
+# Создание новой колонки для отображения ссылок с гиперссылками
+df_filtered['link'] = df_filtered['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
 # Переформатирование DataFrame в сводную таблицу
-df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
+df_reshaped = df_filtered.pivot(columns='author', values='link').fillna('')
 
 # Переименование индекса и добавление нумерации
 df_reshaped.index = range(1, len(df_reshaped) + 1)
