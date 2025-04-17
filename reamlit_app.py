@@ -61,7 +61,7 @@ df_reshaped.index.name = '№'
 
 
 # Создание DataFrame
-df = pd.DataFrame(data)
+df = pd.DataFrame(japanese_books (1).csv)
 
 # Настройка стиля таблицы
 st.markdown(
