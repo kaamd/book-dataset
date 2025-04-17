@@ -38,17 +38,15 @@ df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(dr
 # Подсчет количества книг у каждого автора
 author_counts = df_filtered['author'].value_counts()
 
-# Получаем список авторов отсортированных по количеству книг (от большего к меньшему)
-sorted_authors = author_counts.index.tolist()
-
 # Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(columns='author', values='title').fillna('')
 
 # Переупорядочиваем столбцы в сводной таблице согласно количеству книг
+sorted_authors = author_counts.index.tolist()  # Получаем список авторов от большего к меньшему
 df_reshaped = df_reshaped.reindex(columns=sorted_authors)
 
 # Переименование индекса и добавление нумерации, независимой от авторов
-df_reshaped.index = range(1, len(df_reshaped) + 1)
+df_reshaped.index = range(1, len(df_reshaped) + 1) 
 
 # Настройка стиля таблицы
 st.markdown(
@@ -75,8 +73,11 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-# Отображение таблицы в Streamlit
-st.dataframe(df_reshaped, use_container_width=True)
+# Отображение таблицы
+st.dataframe(
+    df_reshaped.style.set_table_attributes('class="streamlit-table"'),
+    use_container_width=True,
+)
 
 # Подготовка данных для столбчатой диаграммы.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
