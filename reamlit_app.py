@@ -18,8 +18,7 @@ def load_data():
     return df
 
 df = load_data()
-# Получаем уникальный список авторов в порядке их появления
-ordered_authors = df["author"].unique()
+
 # Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
@@ -36,22 +35,18 @@ authors = st.multiselect(
         "Тору Фудзисава",
     ],
 )
-# Фильтрация DataFrame по выбранным авторам
-df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
 
-# Добавление столбца с порядковыми номерами
+# Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
+df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
+
+# Добавление столбца с порядковыми номерами, который будет независим от авторов
 df_filtered['№'] = range(1, len(df_filtered) + 1)
 
-# Сортировка выбранных авторов по порядку их появления в оригинальном DataFrame
-df_filtered['author'] = pd.Categorical(df_filtered['author'], categories=ordered_authors, ordered=True)
-df_filtered.sort_values('author', inplace=True)
-
-# Переформатирование DataFrame в сводную таблицу (если нужно)
+# Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
 
-# Переименование индекса и отображение таблицы
+# Переименование индекса
 df_reshaped.index.name = '№'
-
 
 # Настройка стиля таблицы
 st.markdown(
@@ -83,7 +78,7 @@ st.markdown(
 
 # Отображение таблицы
 st.dataframe(
-    df_reshaped.style.set_table_attributes('class="streamlit-table"'),
+    df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
 
@@ -104,4 +99,4 @@ chart = chart.encode(
 )
 
 # Display the data as a bar chart using `st.altair_chart`.
-st.altair_chart(chart, use_container_width=True)
+st.altair_chart(chart, use_container_width=True) 
