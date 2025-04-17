@@ -54,8 +54,6 @@ df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').f
 # Переупорядочиваем столбцы в сводной таблице согласно количеству книг
 df_reshaped = df_reshaped.reindex(columns=sorted_authors)
 
-# Переименование индекса
-df_reshaped.index.name = '№'
 
 # Настройка стиля таблицы
 st.markdown(
