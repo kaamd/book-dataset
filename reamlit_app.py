@@ -19,9 +19,10 @@ def load_data():
 
 df = load_data()
 
-# Предполагается, что variable ordered_authors уже определен
+# Выбор авторов с использованием уникальных значений из DataFrame
 authors = st.multiselect(
     "Выберите авторов",
+    options=sorted(df["author"].unique()),  # Получаем уникальные имена авторов напрямую
     default=[
         "Харуки Мураками", 
         "Содзи Симада", 
