@@ -39,15 +39,9 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам и выбор только необходимых колонок
 df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
 
-# Добавление столбца с порядковыми номерами, который будет независим от авторов
-df_filtered['№'] = range(1, len(df_filtered) + 1)
-
 # Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
 
-# Переименование индекса
-df_reshaped.index.name = '№'
-df_reshaped.columns.name = 'автор'
 
 # Настройка стиля таблицы
 st.markdown(
