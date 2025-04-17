@@ -47,8 +47,8 @@ df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').f
 
 # Переименование индекса
 df_reshaped.index.name = '№'
-df_reshaped.title.name = 'Название'
-df_reshaped.author.name = 'Автор'
+# Переименование столбцов на русском
+df_reshaped.columns = [f'Название книги по {author}' for author in df_reshaped.columns]
 
 # Настройка стиля таблицы
 st.markdown(
