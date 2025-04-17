@@ -58,7 +58,8 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
-
+# Сортировка DataFrame по автору в алфавитном порядке
+df = df.sort_values(by='author')
 # Настройка стиля таблицы
 st.markdown(
     """
