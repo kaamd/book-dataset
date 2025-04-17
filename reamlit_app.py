@@ -40,26 +40,21 @@ authors = st.multiselect(
 )
 
 
-# Filter the dataframe based on the selected authors.
-df_filtered = df[df["author"].isin(authors)]
+# Фильтрация DataFrame по выбранным авторам
+df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
 
 # Добавление столбца с порядковыми номерами
-df.reset_index(drop=True, inplace=True)
-df['№'] = range(1, len(df) + 1)
+df_filtered['№'] = range(1, len(df_filtered) + 1)
 
-# Сортируем только выбранные авторы по порядку появления в оригинальном DataFrame
-df_grouped['author'] = pd.Categorical(df_grouped['author'], categories=ordered_authors, ordered=True)
-df_grouped.sort_values('author', inplace=True)
+# Сортировка выбранных авторов по порядку их появления в оригинальном DataFrame
+df_filtered['author'] = pd.Categorical(df_filtered['author'], categories=ordered_authors, ordered=True)
+df_filtered.sort_values('author', inplace=True)
 
-# Переформатируем DataFrame в сводную таблицу
-df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').fillna('')
-# Переименовываем индекс и выводим таблицу
+# Переформатирование DataFrame в сводную таблицу (если нужно)
+df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
+
+# Переименование индекса и отображение таблицы
 df_reshaped.index.name = '№'
-# Сортировка DataFrame по автору в алфавитном порядке
-df = df.sort_values(by='author') 
-
-# Перемещение столбца с порядковыми номерами в начало DataFrame
-df = df[['№', 'author', 'title']]
 # Настройка стиля таблицы
 st.markdown(
     """
