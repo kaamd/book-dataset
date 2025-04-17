@@ -47,13 +47,13 @@ st.dataframe(
 # Prepare data for the bar chart.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-# Create the bar chart
 chart = alt.Chart(df_chart).mark_bar().encode(
-x=alt.X('sum(count):Q', title='Количество книг'),
-y=alt.Y('author:N', title='Авторы', sort='-x'),
-color='title:N',  # Цвет по названию книги
-tooltip=['title:N', 'count:Q']  # Информация при наведении
+    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d')),  # Форматируем ось X как целое число
+    y=alt.Y('author:N', title='Авторы', sort='-x'),
+    color='title:N',  # Цвет по названию книги
+    tooltip=['title:N', 'count:Q']  # Информация при наведении
 ).properties(height=400)
+
 
 # Display the data as a bar chart using `st.altair_chart`.
 st.altair_chart(chart, use_container_width=True)
