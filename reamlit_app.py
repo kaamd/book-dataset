@@ -38,6 +38,9 @@ df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(dr
 author_counts = df_filtered['author'].value_counts()
 # Переупорядочиваем столбцы в сводной таблице согласно количеству книг
 df_reshaped = df_reshaped.reindex(columns=sorted_authors)
+
+# Переформатирование DataFrame в сводную таблицу 
+df_reshaped = df_filtered.pivot(columns='author', values='title')
 # Переименование индекса и добавление нумерации, независимой от авторов
 df_reshaped.index = range(1, len(df_reshaped) + 1) 
 
