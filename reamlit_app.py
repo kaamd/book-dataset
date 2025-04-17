@@ -22,7 +22,6 @@ df = load_data()
 # Предполагается, что variable ordered_authors уже определен
 authors = st.multiselect(
     "Выберите авторов",
-    ordered_authors,
     default=[
         "Харуки Мураками", 
         "Содзи Симада", 
