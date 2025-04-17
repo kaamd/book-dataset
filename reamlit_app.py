@@ -18,6 +18,7 @@ def load_data():
     return df
 
 df = load_data()
+
 # Show a multiselect widget with the authors using `st.multiselect`, используем ordered_authors
 authors = st.multiselect(
     "Выберите авторов",
@@ -33,6 +34,7 @@ authors = st.multiselect(
         "Тору Фудзисава",
     ],
 )
+
 # Фильтрация DataFrame по выбранным авторам
 df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
 
