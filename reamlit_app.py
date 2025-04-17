@@ -94,6 +94,8 @@ chart = alt.Chart(df_chart).mark_bar().encode(
 chart = chart.encode(
     x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
+# Сортировка столбцов в алфавитном порядке
+df_reshaped = df_reshaped.reindex(sorted(df_reshaped.columns), axis=1)
 
 # Display the data as a bar chart using `st.altair_chart`.
 st.altair_chart(chart, use_container_width=True) 
