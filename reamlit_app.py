@@ -39,19 +39,24 @@ authors = st.multiselect(
     ],
 )
 
+
 # Filter the dataframe based on the selected authors.
 df_filtered = df[df["author"].isin(authors)]
 
-# Assign a sequential index to each row for display.
-df_filtered['index'] = df_filtered.index + 1  # Создаем новый столбец с порядковым номером
+# Добавляем новый столбец с порядковым номером
+df_filtered['index'] = df_filtered.index + 1
 
-# Group by 'author' and aggregate book titles
+# С группировка по 'author' и агрегация названий книг
 df_grouped = df_filtered.groupby(['index', 'author'])['title'].apply(lambda x: ', '.join(x)).reset_index()
 
-# Reshape the dataframe to a pivot table with authors as columns
+# Сортируем только выбранные авторы по порядку появления в оригинальном DataFrame
+df_grouped['author'] = pd.Categorical(df_grouped['author'], categories=ordered_authors, ordered=True)
+df_grouped.sort_values('author', inplace=True)
+
+# Переформатируем DataFrame в сводную таблицу
 df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').fillna('')
 
-# Rename the index to use the symbol '№'
+# Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 
 # Display the data as a table using `st.dataframe`.
@@ -59,7 +64,6 @@ st.dataframe(
     df_reshaped,
     use_container_width=True,
 )
-
 # Prepare data for the bar chart.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
