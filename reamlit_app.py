@@ -45,11 +45,15 @@ df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
 # Сортировка выбранных авторов по алфавиту
 df_filtered.sort_values(by='author', inplace=True)
 
-# Добавление столбца с порядковыми номерами, начинающимися с 1
+# Добавление столбца с порядковыми номерами
 df_filtered['№'] = range(1, len(df_filtered) + 1)
+
+# Переформатирование DataFrame в сводную таблицу
+df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
 
 # Переименование индекса
 df_reshaped.index.name = '№'
+
 
 # Настройка стиля таблицы
 st.markdown(
