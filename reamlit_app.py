@@ -59,10 +59,6 @@ df_reshaped = df_grouped.pivot(index='index', columns='author', values='title').
 # Переименовываем индекс и выводим таблицу
 df_reshaped.index.name = '№'
 
-
-# Создание DataFrame
-df = pd.DataFrame(japanese_books (1).csv)
-
 # Настройка стиля таблицы
 st.markdown(
     """
