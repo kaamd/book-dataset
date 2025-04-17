@@ -33,26 +33,20 @@ authors = st.multiselect(
         "Тору Фудзисава",
     ],
 )
-
-
 # Фильтрация DataFrame по выбранным авторам
 df_filtered = df[df["author"].isin(authors)].reset_index(drop=True)
+
+# Сортировка выбранных авторов по алфавиту
+df_filtered.sort_values(by='author', inplace=True)
 
 # Добавление столбца с порядковыми номерами
 df_filtered['№'] = range(1, len(df_filtered) + 1)
 
-# Сортировка выбранных авторов по порядку их появления в оригинальном DataFrame
-df_filtered['author'] = pd.Categorical(df_filtered['author'], categories=ordered_authors, ordered=True)
-df_filtered.sort_values('author', inplace=True)
-
-# Переформатирование DataFrame в сводную таблицу (если нужно)
+# Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
 
-# Переименование индекса и отображение таблицы
+# Переименование индекса
 df_reshaped.index.name = '№'
-
-# Сортировка DataFrame по автору в алфавитном порядке
-df = df.sort_values(by='author')
 
 # Настройка стиля таблицы
 st.markdown(
