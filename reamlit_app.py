@@ -42,6 +42,7 @@ if authors:
 
 # Добавление столбца с порядковыми номерами, который будет независим от авторов
 df_filtered['№'] = range(1, len(df_filtered) + 1)
+df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
 # Переформатирование DataFrame в сводную таблицу
 df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
