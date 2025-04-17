@@ -21,7 +21,6 @@ df = load_data()
 # Show a multiselect widget with the authors using `st.multiselect`, используем ordered_authors
 authors = st.multiselect(
     "Выберите авторов",
-    ordered_authors,
     default=[
         "Харуки Мураками", 
         "Содзи Симада", 
