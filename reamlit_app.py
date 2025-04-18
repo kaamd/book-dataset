@@ -2,7 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-# Show the page title and description.
+# заголовок и описание страницы.
 st.set_page_config(page_title="Book dataset", page_icon="📚")
 st.title("📚 Book dataset")
 st.write(
@@ -11,12 +11,11 @@ st.write(
     """
 )
 
-# Load the data from a CSV.
+# Загрузка данных из файла CSV.
 @st.cache_data
 def load_data():
     df = pd.read_csv("japanese_books.csv")
     return df
-
 df = load_data()
 
 # Выбор авторов с использованием уникальных значений из DataFrame
@@ -39,7 +38,7 @@ authors = st.multiselect(
 # Фильтрация DataFrame по выбранным авторам
 if authors:
     df_filtered = df[df["author"].isin(authors)][["author", "title", "link"]].reset_index(drop=True)
-
+    
     # Проверка, есть ли отфильтрованные данные
     if not df_filtered.empty:
         # Добавление порядкового номера
@@ -54,9 +53,6 @@ if authors:
 
         # Сортировка по количеству книг от большего к меньшему
         df_sorted = df_merged.sort_values(by='count', ascending=False)
-
-        # Удаление лишнего столбца 'count'
-        df_sorted = df_sorted.drop(columns=['count'])
 
         # Добавление столбца "о книге" с ссылкой на книгу
         df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
