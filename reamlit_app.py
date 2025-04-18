@@ -72,7 +72,7 @@ if authors:
         }
         
         .streamlit-table th {
-            background-color: #D0E9C6; /* Обновленный светло-зеленый цвет фона */
+            background-color: #98fb98
         }
         </style>
         """,
