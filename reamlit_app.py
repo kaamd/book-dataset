@@ -52,32 +52,32 @@ if authors:
 # Именование колонок в таблице
         df_final = df_sorted[['№','author', 'title', 'о книге']]
 # Отображение таблицы
-        st.markdown(
-            """
-            <style>
-            .streamlit-table {
-                border-collapse: collapse;
-                width: 100%;
-            }
-            
-            .streamlit-table th, .streamlit-table td {
-                max-width: 200px;
-                text-align: left;
-                padding: 5px;
-                overflow-wrap: break-word;
-                word-wrap: break-word;
-                word-break: break-word;
-                white-space: normal;
-                border: 1px solid #ddd;
-            }
-            
-            .streamlit-table th {
-                background-color: #98FF98;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
+       st.markdown(
+    """
+    <style>
+    .streamlit-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    .streamlit-table th, .streamlit-table td {
+        max-width: 200px;
+        text-align: left;
+        padding: 5px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        border: 1px solid #ddd;
+    }
+    
+    .streamlit-table th {
+        background-color: #D0E9C6; /* Обновленный светло-зеленый цвет фона */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Отображаем таблицу
         st.dataframe(
             df_final.style.set_table_attributes('class="streamlit-table"'),
