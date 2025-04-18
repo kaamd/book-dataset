@@ -39,26 +39,28 @@ authors = st.multiselect(
 if authors:
     df_filtered = df[df["author"].isin(authors)][["author", "title", "link"]].reset_index(drop=True)
     
-    # Проверка, есть ли отфильтрованные данные
+# Проверка, есть ли отфильтрованные данные
     if not df_filtered.empty:
-
-        # Подсчет количества книг у каждого автора
+# Добавление порядкового номера
+        df_filtered['№'] = range(1, len(df_filtered) + 1)
+        
+# Подсчет количества книг у каждого автора
         author_counts = df_filtered['author'].value_counts().reset_index()
         author_counts.columns = ['author', 'count']
 
-        # Объединение с отфильтрованными данными
+# Объединение с отфильтрованными данными
         df_merged = df_filtered.merge(author_counts, on='author')
 
-        # Сортировка по количеству книг от большего к меньшему
+# Сортировка по количеству книг от большего к меньшему
         df_sorted = df_merged.sort_values(by='count', ascending=False)
 
-        # Добавление столбца "о книге" с ссылкой на книгу
+# Добавление столбца "о книге" с ссылкой на книгу
         df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
-        # Именование колонок в таблице
+# Именование колонок в таблице
         df_final = df_sorted[['№', 'author', 'title', 'о книге']]
 
-        # Отображение таблицы
+# Отображение таблицы
         st.markdown(
             """
             <style>
@@ -86,27 +88,26 @@ if authors:
             unsafe_allow_html=True
         )
 
-        # Отображаем таблицу
+# Отображаем таблицу
         st.dataframe(
             df_final.style.set_table_attributes('class="streamlit-table"'),
             use_container_width=True,
         )
 
-        # Подготвка данных для столбчатой диаграммы
-df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
+# Подготвка данных для столбчатой диаграммы
+        df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
 # Проверяем, что count является целым числом
-chart = alt.Chart(df_chart).mark_bar().encode(
-x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
-y=alt.Y('author:N', title='Авторы', sort='-x'),
-color='title:N',  # Цвет по названию книги
-tooltip=['title:N', 'count:Q']  # Информация при наведении
-).properties(height=400)
-
+        chart = alt.Chart(df_chart).mark_bar().encode(
+        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
+        y=alt.Y('author:N', title='Авторы', sort='-x'),
+        color='title:N',  # Цвет по названию книги
+        tooltip=['title:N', 'count:Q']  # Информация при наведении
+        ).properties(height=400)    
 # Убедитесь, что на оси X отображаются только уникальные значения
-chart = chart.encode(
-x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
-)
+        chart = chart.encode(
+        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
+        )
 
 # Отображаем данные в виде столбчатой диаграммы
-st.altair_chart(chart, use_container_width=True)
+        st.altair_chart(chart, use_container_width=True)
