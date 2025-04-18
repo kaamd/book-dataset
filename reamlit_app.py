@@ -93,7 +93,8 @@ if authors:
         )
 
 # Отображаем таблицу
-st.dataframe(df_final.style.set_table_attributes('class="streamlit-table"'),
+st.dataframe(
+    df_final.style.set_table_attributes('class="streamlit-table"'),
 use_container_width=True,
 )
 
