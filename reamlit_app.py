@@ -113,6 +113,7 @@ chart = chart.encode(
 x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
 
-# Отображаем данные в виде столбчатой диаграммы
-st.altair_chart(chart, use_container_width=True)
-
+ # Отображаем данные в виде столбчатой диаграммы
+        st.altair_chart(chart, use_container_width=True)
+    else:
+        st.write("Нет книг для выбранных авторов.")
