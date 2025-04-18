@@ -52,7 +52,7 @@ if authors:
 # Именование колонок в таблице
         df_final = df_sorted[['№','author', 'title', 'о книге']]
 # Отображение таблицы
-       st.markdown(
+    st.markdown(
     """
     <style>
     .streamlit-table {
