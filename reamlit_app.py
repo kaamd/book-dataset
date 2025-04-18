@@ -59,7 +59,7 @@ if authors:
     df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
     # Именование колонок в таблице
-    df_final = df_sorted[['№', 'автор', 'название', 'о книге']]
+    df_final = df_sorted[['№', 'author', 'title', 'о книге']]
 
     # Настройка стиля таблицы
     st.markdown(
