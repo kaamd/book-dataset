@@ -95,7 +95,7 @@ st.dataframe(
     df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
- Подготвка данных для столбчатой диаграммы
+# Подготвка данных для столбчатой диаграммы
 author_order = df_sorted["author"].unique()
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
