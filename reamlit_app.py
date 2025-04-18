@@ -50,7 +50,7 @@ if authors:
 # Добавление столбца "о книге" с ссылкой на книгу
         df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 # Именование колонок в таблице
-        df_final = df_sorted[[ 'author', 'title', 'о книге']]
+        df_final = df_sorted[['№','author', 'title', 'о книге']]
 # Отображение таблицы
         st.markdown(
             """
@@ -72,7 +72,7 @@ if authors:
             }
             
             .streamlit-table th {
-                background-color: #f0f0f0;
+                background-color: #f9f9f9;
             }
             </style>
             """,
