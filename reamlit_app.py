@@ -95,29 +95,15 @@ st.dataframe(
     df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
+# Create the bar chart
+chart = alt.Chart(df_chart).mark_bar().encode(
+    x=alt.X('sum(count):Q', title='Количество книг', 
+             bin=alt.Bin(step=1, maxbins=100),  # Устанавливаем шаг оси X равным 1
+             scale=alt.Scale(domain=[0, None])),  # Устанавливаем минимальное значение на оси X равным 0
+    y=alt.Y('author:N', title='Авторы', sort='-x'),
+    color='title:N',  # Цвет по названию книги
+    tooltip=['title:N', 'count:Q']  # Информация при наведении
+).properties(height=400)
 
-# Получить порядок авторов из df_sorted
-author_order = df_sorted["author"].unique()
-
-# Prepare data for the bar chart.
-df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
-
-# Проверка, есть ли данные для графика
-st.write("Данные для графика:", df_chart)
-
-if not df_chart.empty:
-    # Убедитесь, что count является целым числом
-    chart = alt.Chart(df_chart).mark_bar().encode(
-        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
-        y=alt.Y('author:N', title='Авторы', sort=alt.EncodingSortField(order='custom', sort_order=author_order)),  # Используем определённый порядок
-        color='title:N',
-        tooltip=['title:N', 'count:Q']
-    ).properties(height=400)
-
-    # Убедитесь, что на оси X отображаются только уникальные значения
-    chart = chart.encode(
-        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False))
-    )
-
-    # Display the data as a bar chart using `st.altair_chart`.
-    st.altair_chart(chart, use_container_width=True)
+# Display the data as a bar chart using `st.altair_chart`.
+st.altair_chart(chart, use_container_width=True)
