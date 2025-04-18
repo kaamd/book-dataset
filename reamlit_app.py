@@ -37,43 +37,57 @@ authors = st.multiselect(
 )
 # Фильтрация DataFrame по выбранным авторам
 if authors:
-        df_filtered = df[df["author"].isin(authors)][["author", "title"]].reset_index(drop=True)
-        df_filtered['№'] = range(1, len(df_filtered) + 1)
+    df_filtered = df[df["author"].isin(authors)][["author", "title", "book_url"]].reset_index(drop=True)
 
-# Добавление столбца с порядковыми номерами, который будет независим от авторов
-df_filtered['№'] = range(1, len(df_filtered) + 1)
-df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
+    # Добавление порядкового номера
+    df_filtered['№'] = range(1, len(df_filtered) + 1)
 
-# Переформатирование DataFrame в сводную таблицу
-df_reshaped = df_filtered.pivot(index='№', columns='author', values='title').fillna('')
+    # Подсчет количества книг у каждого автора
+    author_counts = df_filtered['author'].value_counts().reset_index()
+    author_counts.columns = ['author', 'count']
 
-# Настройка стиля таблицы
-st.markdown(
-    """
-    <style>
-    .streamlit-table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    
-    .streamlit-table th, .streamlit-table td {
-        max-width: 200px; /* Максимальная ширина ячеек */
-        text-align: left; /* Выравнивание текста */
-        padding: 5px; /* Отступы внутри ячеек */
-        overflow-wrap: break-word; /* Перенос слов */
-        word-wrap: break-word; /* Поддержка переноса для старых браузеров */
-        word-break: break-word; /* Перенос текста на новую строку */
-        white-space: normal; /* Позволяет переносить текст */
-        border: 1px solid #ddd; /* Граница ячеек */
-    }
-    
-    .streamlit-table th {
-        background-color: #f0f0f0; /* Цвет фона заголовков */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    # Объединение с отфильтрованными данными
+    df_merged = df_filtered.merge(author_counts, on='author')
+
+    # Сортировка по количеству книг от большего к меньшему
+    df_sorted = df_merged.sort_values(by='count', ascending=False)
+
+    # Удаление лишнего столбца 'count'
+    df_sorted = df_sorted.drop(columns=['count'])
+
+    # Добавление столбца "о книге" с ссылкой на книгу
+    df_sorted['о книге'] = df_sorted['book_url'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
+
+    # Именование колонок в таблице
+    df_final = df_sorted[['№', 'author', 'title', 'о книге']]
+
+    # Настройка стиля таблицы
+    st.markdown(
+        """
+        <style>
+        .streamlit-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .streamlit-table th, .streamlit-table td {
+            max-width: 200px;
+            text-align: left;
+            padding: 5px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            border: 1px solid #ddd;
+        }
+        
+        .streamlit-table th {
+            background-color: #f0f0f0;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Отображение таблицы
 st.dataframe(
