@@ -114,6 +114,6 @@ x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(for
 )
 
  # Отображаем данные в виде столбчатой диаграммы
-        st.altair_chart(chart, use_container_width=True)
-    else:
-        st.write("Нет книг для выбранных авторов.")
+    st.altair_chart(chart, use_container_width=True)
+else:
+    st.write("Нет книг для выбранных авторов.")
