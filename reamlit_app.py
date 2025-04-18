@@ -95,20 +95,23 @@ st.dataframe(
     df.style.set_table_attributes('class="streamlit-table"'),
     use_container_width=True,
 )
+# Получение уникальных авторов в порядке, которые мы использовали в таблице
+unique_authors_order = df_final['author'].tolist()
+
 # Подготвка данных для столбчатой диаграммы
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-# Проверяем, что count является целым числом
+# Столбчатая диаграмма с учетом порядка авторов
 chart = alt.Chart(df_chart).mark_bar().encode(
-x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
-y=alt.Y('author:N', title='Авторы', sort='-x'),
-color='title:N',  # Цвет по названию книги
-tooltip=['title:N', 'count:Q']  # Информация при наведении
+    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
+    y=alt.Y('author:N', title='Авторы', sort=unique_authors_order),  # Применяем порядок из списка
+    color='title:N',
+    tooltip=['title:N', 'count:Q']
 ).properties(height=400)
 
 # Убедитесь, что на оси X отображаются только уникальные значения
 chart = chart.encode(
-x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
+    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))
 )
 
 # Отображаем данные в виде столбчатой диаграммы
