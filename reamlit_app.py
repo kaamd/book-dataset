@@ -102,18 +102,22 @@ author_order = df_sorted["author"].unique()
 # Prepare data for the bar chart.
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-# Предполагаем, что count является целым числом
-chart = alt.Chart(df_chart).mark_bar().encode(
-    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
-    y=alt.Y('author:N', title='Авторы', sort=alt.EncodingSortField(order='custom', sort_order=author_order)),  # Используем определенный порядок
-    color='title:N',
-    tooltip=['title:N', 'count:Q']
-).properties(height=400)
+# Проверка, есть ли данные для графика
+st.write("Данные для графика:", df_chart)
 
-# Убедимся, что на оси X отображаются только уникальные значения
-chart = chart.encode(
-    x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))
-)
+if not df_chart.empty:
+    # Убедитесь, что count является целым числом
+    chart = alt.Chart(df_chart).mark_bar().encode(
+        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
+        y=alt.Y('author:N', title='Авторы', sort=alt.EncodingSortField(order='custom', sort_order=author_order)),  # Используем определённый порядок
+        color='title:N',
+        tooltip=['title:N', 'count:Q']
+    ).properties(height=400)
 
-# Display the data as a bar chart using `st.altair_chart`.
-st.altair_chart(chart, use_container_width=True)
+    # Убедитесь, что на оси X отображаются только уникальные значения
+    chart = chart.encode(
+        x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False))
+    )
+
+    # Display the data as a bar chart using `st.altair_chart`.
+    st.altair_chart(chart, use_container_width=True)
