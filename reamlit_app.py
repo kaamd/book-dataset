@@ -92,22 +92,21 @@ if authors:
             unsafe_allow_html=True
         )
 
-# Отображаем таблицу
-st.dataframe(
-    df_final.style.set_table_attributes('class="streamlit-table"'),
-use_container_width=True,
-)
+        # Отображаем таблицу
+        st.dataframe(
+            df_final.style.set_table_attributes('class="streamlit-table"'),
+            use_container_width=True,
+        )
 
-# Подготвка данных для столбчатой диаграммы
-df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
+        # Подготвка данных для столбчатой диаграммы
+        df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-# Проверяем, что count является целым числом
-chart = alt.Chart(df_chart).mark_bar().encode(
-x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
-y=alt.Y('author:N', title='Авторы', sort='-x'),
-color='title:N',  # Цвет по названию книги
-tooltip=['title:N', 'count:Q']  # Информация при наведении
-).properties(height=400)
+        # Столбчатая диаграмма с учетом порядка авторов
+        chart = alt.Chart(df_chart).mark_bar().encode(
+            x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
+            y=alt.Y('author:N', title='Авторы', sort='-x'),  # Сортируем по количеству книг
+            color='title:N',
+            tooltip=['title:N', 'count:Q']
 
 # Убедитесь, что на оси X отображаются только уникальные значения
 chart = chart.encode(
