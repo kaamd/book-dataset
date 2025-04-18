@@ -83,6 +83,8 @@ if authors:
             df_final.style.set_table_attributes('class="streamlit-table"'),
             use_container_width=True,
         )
+# Получение уникальных авторов в порядке, которые мы использовали в таблице
+        unique_authors_order = df_final['author'].tolist()
 # Подготвка данных для столбчатой диаграммы
         df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 # Проверяем, что count является целым числом
