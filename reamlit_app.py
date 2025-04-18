@@ -106,7 +106,7 @@ y=alt.Y('author:N', title='Авторы', sort=alt.EncodingSortField(order='cust
 color='title:N',
 tooltip=['title:N', 'count:Q']
 ).properties(height=400)
-
+)
     # Убедитесь, что на оси X отображаются только уникальные значения
     chart = chart.encode(
 x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))
