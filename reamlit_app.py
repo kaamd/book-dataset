@@ -56,7 +56,7 @@ if authors:
     df_sorted = df_sorted.drop(columns=['count'])
 
     # Добавление столбца "о книге" с ссылкой на книгу
-    df_sorted['о книге'] = df_sorted['book_url'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
+    df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
     # Именование колонок в таблице
     df_final = df_sorted[['№', 'автор', 'название', 'о книге']]
