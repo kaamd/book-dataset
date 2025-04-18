@@ -41,8 +41,6 @@ if authors:
     
     # Проверка, есть ли отфильтрованные данные
     if not df_filtered.empty:
-        # Добавление порядкового номера
-        df_filtered['№'] = range(1, len(df_filtered) + 1)
 
         # Подсчет количества книг у каждого автора
         author_counts = df_filtered['author'].value_counts().reset_index()
