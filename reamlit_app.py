@@ -37,7 +37,7 @@ authors = st.multiselect(
 )
 # Фильтрация DataFrame по выбранным авторам
 if authors:
-    df_filtered = df[df["author"].isin(authors)][["author", "title", "book_url"]].reset_index(drop=True)
+    df_filtered = df[df["author"].isin(authors)][["author", "title", "link"]].reset_index(drop=True)
 
     # Добавление порядкового номера
     df_filtered['№'] = range(1, len(df_filtered) + 1)
@@ -59,7 +59,7 @@ if authors:
     df_sorted['о книге'] = df_sorted['book_url'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
     # Именование колонок в таблице
-    df_final = df_sorted[['№', 'author', 'title', 'о книге']]
+    df_final = df_sorted[['№', 'автор', 'название', 'о книге']]
 
     # Настройка стиля таблицы
     st.markdown(
