@@ -99,21 +99,20 @@ if authors:
         )
 
         # Подготвка данных для столбчатой диаграммы
-        df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
+df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
 
-        # Столбчатая диаграмма с учетом порядка авторов
-        chart = alt.Chart(df_chart).mark_bar().encode(
-            x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),
-            y=alt.Y('author:N', title='Авторы', sort='-x'),  # Сортируем по количеству книг
-            color='title:N',
-            tooltip=['title:N', 'count:Q']
-        )
+# Проверяем, что count является целым числом
+chart = alt.Chart(df_chart).mark_bar().encode(
+x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False)),  # Форматируем ось X как целое число
+y=alt.Y('author:N', title='Авторы', sort='-x'),
+color='title:N',  # Цвет по названию книги
+tooltip=['title:N', 'count:Q']  # Информация при наведении
+).properties(height=400)
+
 # Убедитесь, что на оси X отображаются только уникальные значения
 chart = chart.encode(
 x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(format='d', ticks=True, grid=False, values=[0, 1, 2, 3, 4, 5]))  # Указать значения, которые хотим видеть на оси X
 )
 
- # Отображаем данные в виде столбчатой диаграммы
-    st.altair_chart(chart, use_container_width=True)
-else:
-    st.write("Нет книг для выбранных авторов.")
+# Отображаем данные в виде столбчатой диаграммы
+st.altair_chart(chart, use_container_width=True)
