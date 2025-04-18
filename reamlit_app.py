@@ -72,7 +72,7 @@ if authors:
             }
             
             .streamlit-table th {
-                background-color: #f9f9f9;
+                background-color: #98FF98;
             }
             </style>
             """,
