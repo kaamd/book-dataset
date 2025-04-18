@@ -37,64 +37,66 @@ authors = st.multiselect(
 )
 # Фильтрация DataFrame по выбранным авторам
 if authors:
+    # Фильтрация DataFrame по выбранным авторам
     df_filtered = df[df["author"].isin(authors)][["author", "title", "link"]].reset_index(drop=True)
 
-    # Добавление порядкового номера
-    df_filtered['№'] = range(1, len(df_filtered) + 1)
-    df.index += 1  # Начинаем индексацию с 1
+    # Проверка, есть ли отфильтрованные данные
+    if not df_filtered.empty:
+        # Добавление порядкового номера
+        df_filtered['№'] = range(1, len(df_filtered) + 1)
 
-    # Подсчет количества книг у каждого автора
-    author_counts = df_filtered['author'].value_counts().reset_index()
-    author_counts.columns = ['author', 'count']
+        # Подсчет количества книг у каждого автора
+        author_counts = df_filtered['author'].value_counts().reset_index()
+        author_counts.columns = ['author', 'count']
 
-    # Объединение с отфильтрованными данными
-    df_merged = df_filtered.merge(author_counts, on='author')
+        # Объединение с отфильтрованными данными
+        df_merged = df_filtered.merge(author_counts, on='author')
 
-    # Сортировка по количеству книг от большего к меньшему
-    df_sorted = df_merged.sort_values(by='count', ascending=False)
+        # Сортировка по количеству книг от большего к меньшему
+        df_sorted = df_merged.sort_values(by='count', ascending=False)
 
-    # Удаление лишнего столбца 'count'
-    df_sorted = df_sorted.drop(columns=['count'])
+        # Удаление лишнего столбца 'count'
+        df_sorted = df_sorted.drop(columns=['count'])
 
-    # Добавление столбца "о книге" с ссылкой на книгу
-    df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
+        # Добавление столбца "о книге" с ссылкой на книгу
+        df_sorted['о книге'] = df_sorted['link'].apply(lambda x: f'<a href="{x}">Ссылка на книгу</a>')
 
-    # Именование колонок в таблице
-    df_final = df_sorted[['№', 'author', 'title', 'о книге']]
+        # Именование колонок в таблице
+        df_final = df_sorted[['№', 'author', 'title', 'о книге']]
 
-    # Настройка стиля таблицы
-    st.markdown(
-        """
-        <style>
-        .streamlit-table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        .streamlit-table th, .streamlit-table td {
-            max-width: 200px;
-            text-align: left;
-            padding: 5px;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-word;
-            white-space: normal;
-            border: 1px solid #ddd;
-        }
-        
-        .streamlit-table th {
-            background-color: #f0f0f0;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+        # Отображение таблицы
+        st.markdown(
+            """
+            <style>
+            .streamlit-table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            .streamlit-table th, .streamlit-table td {
+                max-width: 200px;
+                text-align: left;
+                padding: 5px;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                word-break: break-word;
+                white-space: normal;
+                border: 1px solid #ddd;
+            }
+            
+            .streamlit-table th {
+                background-color: #f0f0f0;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
-# Отображение таблицы
-st.dataframe(
-    df.style.set_table_attributes('class="streamlit-table"'),
-    use_container_width=True,
-)
+        # Отображаем таблицу
+        st.dataframe(
+            df_final.style.set_table_attributes('class="streamlit-table"'),
+            use_container_width=True,
+        )
 # Получение уникальных авторов в порядке, которые мы использовали в таблице
 unique_authors_order = df_final['author'].tolist()
 
