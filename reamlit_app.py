@@ -92,11 +92,10 @@ if authors:
             unsafe_allow_html=True
         )
 
-        # Отображаем таблицу
-        st.dataframe(
-            df_final.style.set_table_attributes('class="streamlit-table"'),
-            use_container_width=True,
-        )
+# Отображаем таблицу
+st.dataframe(df_final.style.set_table_attributes('class="streamlit-table"'),
+use_container_width=True,
+)
 
 # Подготвка данных для столбчатой диаграммы
 df_chart = df_filtered.groupby(['author', 'title']).size().reset_index(name='count')
@@ -115,5 +114,5 @@ x=alt.X('sum(count):Q', title='Количество книг', axis=alt.Axis(for
 )
 
 # Отображаем данные в виде столбчатой диаграммы
-    st.altair_chart(chart, use_container_width=True)
+st.altair_chart(chart, use_container_width=True)
 
